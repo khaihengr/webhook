@@ -32,7 +32,6 @@ app.get("/webhook", (req, res) => {
             res.sendStatus(403);
         }
     }
-
 })
 app.listen(process.env.PORT || 3000, () => {
     console.log("webhook is listen")
