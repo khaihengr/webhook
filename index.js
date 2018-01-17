@@ -9,6 +9,7 @@ app.get("/", (req, res) => {
 })
 app.post("/webhook", (req, res) => {
     let body = req.body;
+    console.log(body);
     if (body.object === "page") {
         body.entry.forEach(entry => {
             let webhook_event = entry.messaging[0];
@@ -20,7 +21,7 @@ app.post("/webhook", (req, res) => {
     }
 })
 app.get("/webhook", (req, res) => {
-    let Verify_Token = "as";
+    let Verify_Token = "alan";
     let mode = req.query['hub.mode'];
     let token = req.query['hub.verify_token'];
     let challenge = req.query['hub.challenge'];
