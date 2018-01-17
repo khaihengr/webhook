@@ -5,6 +5,7 @@ bodyParser = require("body-parser"),
 app = express().use(bodyParser.json());
 
 app.get("/", (req, res) => {
+    console.log("logged");
     res.end("ok");
 })
 app.post("/webhook", (req, res) => {
