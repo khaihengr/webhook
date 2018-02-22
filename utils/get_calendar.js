@@ -47,9 +47,15 @@ let split_place = (dt)=>{
     dt = dt.split("(").filter(item=>item!="");
     dt = dt.map(item=>{
         items = item.split(") ");
-        return {
-            id:items[0],room:items[1]
+        if (items.length == 2) {
+            return {
+                id:items[0],room:items[1]
+            }
         }
+        return {
+            room:items[0]
+        }
+        
     })
     return dt;
 }
