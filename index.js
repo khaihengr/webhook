@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express().use(bodyParser.json());
 const request = require('request');
 const util = require('util');
-const {generic} = require('./libs/templates');
+const { generic } = require('./libs/templates');
 require('dotenv').config();
 
 // Routers
@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 function handleMessage(sender_psid, received_message) {
     let response;
     if (received_message.text) {
+
         response = {
             'text': `You sent the message: "${received_message.text}". Now send me an image!`,
         };
@@ -103,5 +104,4 @@ app.get('/webhook', (req, res) => {
 app.use(getClendar);
 app.listen(process.env.PORT || 3000, () => {
     console.log('webhook is listen');
-})
-;
+});
