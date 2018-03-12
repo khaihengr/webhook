@@ -5,6 +5,26 @@ const app = express().use(bodyParser.json());
 const request = require('request');
 const util = require('util');
 const { generic } = require('./libs/templates');
+const unicode = require("./helpers/unicode_convert");
+const NLP = require("./libs/nlp_handing");
+const mongoose = require("mongoose");
+const M_student = require("./models/m_student");
+const moment = require("moment");
+const _ = require("lodash");
+require("dotenv").config();
+
+// Set default format for momentjs
+moment.defaultFormat="DD/MM/YYYY"
+
+mongoose.Promise = global.Promise;
+// let MONGO_URI = process.env.MONGO_URI;
+console.log(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI).then(()=>{
+    console.log('DB is connected ...')
+}).catch(()=>{
+    console.log("error");
+});
+
 require('dotenv').config();
 
 // Routers
@@ -19,17 +39,98 @@ app.get('/', (req, res) => {
 });
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-    let response;
-    if (received_message.text) {
+    try{
+        let response;
+        if (received_message.text) {
+            let message = unicode.unicode_convert(received_message.text);
+            let cmd_data = NLP.NLP_Handing(message);
+            switch (cmd_data.state) {
+                case "signin": {
+                    let account_info = cmd.data;
+                    response = {
+                        'text': `Bạn đã đăng nhập với tài khoản:
+                        user: ${account_info.username},
+                        pass: ${account_info.password}
+                        `
+                    };
+                    getClendar.get_calendar(account_info.username,account_info.password,(data)=>{
+                        let student={
+                            _id         : sender_psid,
+                            student_id  : account_info.username,
+                            password    : account_info.password,
+                            calendar    : data
+                        };
+                        M_student.save_data(student);
+                    })
+                    break;    
+                }
+                case "asking": {
+                    let cmd = cmd_data.data;
+                    M_student.get_data(sender_psid, (err, res) => {
+                        if (res) {
+                            let data = res.calendar;
+                            let notif=[];
+                            data.forEach(subjects => {
+                                let subject = subjects;
+                                subjects.datetime.forEach((s, i) => {
+                                    if (moment(cmd, "DD/MM/YYYY").isSameOrAfter(moment(s.startDate, "DD/MM/YYYY").format("YYYY-MM-DD")) && 
+                                        moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
+                                        && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
+                                        let room = subject.place.find(p => {
+                                            if (new RegExp(i, "gi").test(p.room)) {
+                                                return p;
+                                            }
+                                        });
+                                        notif.push({
+                                            name: subject.name,
+                                            stDate: s.stDate,
+                                            place: room.room
+                                            
+                                        })
+                                    }
+                                })
+                            })
+                            setTimeout(() => {
+                                if (notif.length > 0) {
+                                    notif.forEach(mes => {
+                                        mes.name = mes.name.substring(0, mes.name.indexOf("-"));
+                                        response = {
+                                            'text': `học phần ${mes.name} tiết ${mes.stDate} tại ${mes.place} :)`
+                                        }
+                            
+                                        callSendAPI(sender_psid, response);
+                                    });
 
-        response = {
-            'text': `You sent the message: "${received_message.text}". Now send me an image!`,
+                                } else {
+                                    response = {
+                                        'text': `Lịch học trống :3`
+                                    }
+                                    callSendAPI(sender_psid, response);
+                                }
+                                
+                            }, 500);
+                        }
+                        
+                    });
+                    break;
+                }    
+                default: {
+                    response = {
+                        'text':'no match anything'
+                    }
+                }    
+            }
+            callSendAPI(sender_psid, response);
+        } else if (received_message.attachments) {
+            console.log(util.inspect(received_message));
+            let attachment_url = received_message.attachments[0].payload.url;
+        }
+    }catch(err){
+        let response = {
+            'text': err.message
         };
-    } else if (received_message.attachments) {
-        console.log(util.inspect(received_message));
-        let attachment_url = received_message.attachments[0].payload.url;
+        callSendAPI(sender_psid, response);
     }
-    callSendAPI(sender_psid, response);
 }
 
 // Handles messaging_postbacks events
@@ -60,8 +161,7 @@ function callSendAPI(sender_psid, response) {
     request.post(url, {
         json: request_body,
     }, (err, res, body) => {
-        console.log(res.statusCode);
-        console.log(body);
+        console.log("body:",body);
         if (!err) {
             console.log('message sent!');
         } else {
@@ -101,7 +201,6 @@ app.get('/webhook', (req, res) => {
         }
     }
 });
-app.use(getClendar);
 app.listen(process.env.PORT || 3000, () => {
     console.log('webhook is listen');
 });

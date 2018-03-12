@@ -6,6 +6,7 @@ let axios = require("axios");
 let fs = require("fs");
 let got = require("got");
 let _ = require("lodash");
+let moment = require("moment");
 
 // Confirm request
 request = request.defaults({jar: true})
@@ -59,9 +60,15 @@ let split_place = (dt)=>{
     })
     return dt;
 }
-router.post('/getcalendar', (req, res) => {
-    let form = init_form({username:"DTC15HD4802010110",password:"hoangkhaj"});
-    
+/**
+ * 
+ * @author Khai Hoang
+ * @mail khaihoangdev@gmail.com
+ * @param {String} username username
+ * @param {String} password password
+ */
+let get_calendar = (username, password,cb) => {
+    let form = init_form({username:username,password:password});
     (async () => {
         try {
             const response = await got(uri.generate);
@@ -72,31 +79,37 @@ router.post('/getcalendar', (req, res) => {
                 "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
                 "form":form
             },(e,r,b)=>{
-                request.get(uri.calendar,
-                    (e,r,b)=>{
-                        let $ = cheerio.load(b);
-                        let count = $("#gridRegistered > tbody > tr").length;
-                        let name = $("#gridRegistered > tbody > tr:nth-child(2) > td:nth-child(2)").text();
-                        let data = [];
-                        for(let i=2;i<count;i++){
-                            let name = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(2)`).text(),/[\r\n\t]+/ig,"");
-                            let termID = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(3)`).text(),/[\r\n\t]+/ig,"");
-                            let  datetime= _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(4)`).text(),/[\r\n\t]+/ig,"");
-                            let place = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(5)`).text(),/[\r\n\t]+/ig,"");
-                            let lecturer = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(6)`).text(),/[\r\n\t]+/ig,"");
-                            let numerator = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(7)`).text(),/[\r\n\t]+/ig,"");
-                            let signNumerator = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(8)`).text(),/[\r\n\t]+/ig,"");
-                            let numberOfCredit = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(9)`).text(),/[\r\n\t]+/ig,"");
-                            let fee = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(10)`).text(),/[\r\n\t]+/ig,"");
-                            let note = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(11)`).text(), /[\r\n\t]+/ig, "");
-                            datetime = split_date(datetime);
-                            place = split_place(place);
-                            data.push({id,name,datetime,place,lecturer,numberOfCredit,numerator,signNumerator,fee,note});
-                        }
-                        setTimeout(()=>{
-                            res.json(data);
-                        },500)
-                    })
+                if(r.statusCode==302){
+                    request.get(uri.calendar,
+                        (e,r,b)=>{
+                            // console.log(b);
+                            let $ = cheerio.load(b);
+                            let count = $("#gridRegistered > tbody > tr").length;
+                            let name = $("#gridRegistered > tbody > tr:nth-child(2) > td:nth-child(2)").text();
+                            let data = [];
+                            for(let i=2;i<count;i++){
+                                let name = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(2)`).text(),/[\r\n\t]+/ig,"");
+                                let termID = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(3)`).text(),/[\r\n\t]+/ig,"");
+                                let  datetime= _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(4)`).text(),/[\r\n\t]+/ig,"");
+                                let place = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(5)`).text(),/[\r\n\t]+/ig,"");
+                                let lecturer = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(6)`).text(),/[\r\n\t]+/ig,"");
+                                let numerator = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(7)`).text(),/[\r\n\t]+/ig,"");
+                                let signNumerator = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(8)`).text(),/[\r\n\t]+/ig,"");
+                                let numberOfCredit = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(9)`).text(),/[\r\n\t]+/ig,"");
+                                let fee = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(10)`).text(),/[\r\n\t]+/ig,"");
+                                let note = _.replace($(`#gridRegistered > tbody > tr:nth-child(${i}) > td:nth-child(11)`).text(), /[\r\n\t]+/ig, "");
+                                datetime = split_date(datetime);
+                                place = split_place(place);
+                                data.push({termID,name,datetime,place,lecturer,numberOfCredit,numerator,signNumerator,fee,note});
+                            }
+                            setTimeout(()=>{
+                                // console.log(form);
+                                cb(data);
+                            },500)
+                        })
+                }
+
+                
                 })
                 
             } catch (error) {
@@ -105,9 +118,9 @@ router.post('/getcalendar', (req, res) => {
             }
         })();
         
-    });
+    };
     let init_form = (user) => {
-        let username = user.username;
+        let username = _.toUpper(user.username);
         let password = md5(user.password);
         return {
             __EVENTTARGET: '',
@@ -127,5 +140,7 @@ router.post('/getcalendar', (req, res) => {
             hidTrainingSystemId: '',
         };
     };
-    module.exports = router;
+    module.exports = {
+        get_calendar
+    }
     
