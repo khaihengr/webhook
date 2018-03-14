@@ -26,7 +26,6 @@ mongoose.model('student', student);
 let save_data = (data)=>{
     console.log(data);
     let STUDENT = mongoose.model("student");
-
     STUDENT.findById(data._id).then(res => {
         if (!res) {
             new STUDENT(data).save().then(res=>{

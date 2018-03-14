@@ -66,6 +66,7 @@ function handleMessage(sender_psid, received_message) {
                 }
                 case "asking": {
                     let cmd = cmd_data.data;
+                    console.log(cmd);
                     M_student.get_data(sender_psid, (err, res) => {
                         if (res) {
                             let data = res.calendar;
@@ -76,17 +77,27 @@ function handleMessage(sender_psid, received_message) {
                                     if (moment(cmd, "DD/MM/YYYY").isSameOrAfter(moment(s.startDate, "DD/MM/YYYY").format("YYYY-MM-DD")) && 
                                         moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
                                         && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
-                                        let room = subject.place.find(p => {
+                                        let room = {}
+                                        room = subject.place.find(p => {
                                             if (new RegExp(i, "gi").test(p.room)) {
                                                 return p;
                                             }
                                         });
-                                        notif.push({
-                                            name: subject.name,
-                                            stDate: s.stDate,
-                                            place: room.room
-                                            
-                                        })
+                                        if (!room) {
+                                            room = subject.place[0].room;
+                                            notif.push({
+                                                name: subject.name,
+                                                stDate: s.stDate,
+                                                place: room
+                                            })
+                                        } else {
+                                            notif.push({
+                                                name: subject.name,
+                                                stDate: s.stDate,
+                                                place: room.room
+                                            })
+                                        }
+                                        
                                     }
                                 })
                             })
