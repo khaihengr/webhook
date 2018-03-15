@@ -174,6 +174,7 @@ function handleMessage(sender_psid, received_message) {
                                     && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
                                         room = subject.place.find(p => {
+                                            console.log(i);
                                             if (new RegExp(i, "gi").test(p.room)) {
                                                 return p;
                                             }
