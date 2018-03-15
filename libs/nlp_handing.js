@@ -40,8 +40,18 @@ let NLP_Handing = (message) => {
             data: ""
         }
     }
+    if (is_greeting_syntax(message)) {
+        return{
+            state:"greeting",
+            data: ""
+        }
+    }
     return message;
 };
+let is_greeting_syntax=(message)  => {
+    let pattern = new RegExp(/.*(hello|xin chao|chao ban|chao|what's up|bello|hallo|bot khoe khong|ngay moi tot lanh)/,"g");
+    return pattern.test(message);
+}
 let is_update_asking = (message) => {
     let pattern = new RegExp(/.*(update)/,"g");
     return pattern.test(message);

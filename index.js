@@ -138,7 +138,7 @@ function handleMessage(sender_psid, received_message) {
                 case "help": {
                     response = {
                         'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
-                                Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
+                        Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
                         `,
                         "quick_replies":[
                             quick_reply.text_reply
@@ -146,7 +146,12 @@ function handleMessage(sender_psid, received_message) {
                     };
                     break;
                 }        
-            
+                case "greeting": {
+                    response = {
+                        'text': "Bot chào bạn :3"
+                    }
+                    break;
+                }
                 default: {
                     response = {
                         'text': 'Bạn có thể chọn help trong menu hoặc gõ help để được trợ giúp. Nếu bạn đã đăng nhập có thể chọn các chức năng bên dưới',
@@ -270,17 +275,18 @@ function handlePostback(sender_psid, received_postback) {
     switch (cmd_data.state) {
         case "started": {
             response = {
-                'text': `Chào mừng bạn đến với Calendar Bot hãy đăng nhập để Bot có thể giúp đỡ bạn nhiều hơn
-                    `
+                'text': `Chào mừng bạn đến với Calendar Bot hãy đăng nhập để Bot có thể giúp đỡ bạn nhiều hơn`
             };
+            break;
         }
         case "signin": {
-                    response = {
-                        'text': `Bạn đã đăng nhập bằng cú pháp như sau:
-                            SIGNIN[USER-PASS]
-                            Với USER và PASS là thông tin đăng nhập trên website của trường của bạn
-                            `
-                    };
+            response = {
+                'text': `Bạn đã đăng nhập bằng cú pháp như sau:
+                SIGNIN[USER-PASS]
+                Với USER và PASS là thông tin đăng nhập trên website của trường của bạn
+                `
+            };
+            break;
         }
         case "update": {
             response = {
@@ -291,13 +297,13 @@ function handlePostback(sender_psid, received_postback) {
         case "help": {
             response = {
                 'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
-                        Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
+                Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
                 `
             };
             break;
         }        
-
-     }
+        
+    }
     
     callSendAPI(sender_psid, response);
 }
