@@ -131,9 +131,8 @@ function handleMessage(sender_psid, received_message) {
                         "quick_replies":[
                             {
                                 "content_type":"text",
-                                "title":"Search",
-                                "payload":"<POSTBACK_PAYLOAD>",
-                                "image_url":"http://trangbatdongsan.vn/templates/images/gg.png"
+                                "title":"Hôm nay",
+                                "payload":"Lịch học hôm nay",
                             },
                         ]
                     }
