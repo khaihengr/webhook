@@ -80,24 +80,25 @@ function handleMessage(sender_psid, received_message) {
                                     moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
                                     && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
-                                        let room_id = i +1;
+                                        let rom_id = i + 1;
                                         room = subject.place.find(p => {
-                                            if (new RegExp(room_id, "gi").test(p.id)) {
+                                            console.log(i);
+                                            if (new RegExp(rom_id, "gi").test(p.id)) {
                                                 return p;
                                             }
                                         });
-                                        if (!room) {
-                                            room = subject.place[0].room;
-                                            notif.push({
-                                                name: subject.name,
-                                                stDate: s.stDate,
-                                                place: room
-                                            })
-                                        } else {
+                                        try {
                                             notif.push({
                                                 name: subject.name,
                                                 stDate: s.stDate,
                                                 place: room.room
+                                            })
+                                        }catch(e){
+                                            room = subject.place[0];
+                                            notif.push({
+                                                name: subject.name,
+                                                stDate: s.stDate,
+                                                place: room
                                             })
                                         }
                                         
