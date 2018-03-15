@@ -80,8 +80,9 @@ function handleMessage(sender_psid, received_message) {
                                     moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
                                     && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
+                                        let room_id = i +1;
                                         room = subject.place.find(p => {
-                                            if (new RegExp(i, "gi").test(p.id)) {
+                                            if (new RegExp(room_id, "gi").test(p.id)) {
                                                 return p;
                                             }
                                         });
