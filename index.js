@@ -11,6 +11,7 @@ const mongoose = require("mongoose");
 const M_student = require("./models/m_student");
 const moment = require("moment");
 const _ = require("lodash");
+const quick_reply = require("./libs/quick_reply");
 require("dotenv").config();
 
 // Set default format for momentjs
@@ -129,11 +130,7 @@ function handleMessage(sender_psid, received_message) {
                     response = {
                         'text': 'no match anything',
                         "quick_replies":[
-                            {
-                                "content_type":"text",
-                                "title":"Hôm nay",
-                                "payload":"Lịch học hôm nay",
-                            },
+                            quick_reply.text_reply
                         ]
                     }
                 }    
@@ -206,7 +203,6 @@ function handleMessage(sender_psid, received_message) {
                                         response = {
                                             'text': `học phần ${mes.name} tiết ${mes.stDate} tại ${mes.place} :)`
                                         }
-                                        
                                         callSendAPI(sender_psid, response);
                                     });
                                     
@@ -225,7 +221,7 @@ function handleMessage(sender_psid, received_message) {
                 }    
                 default: {
                     response = {
-                        'text': 'no match anything',
+                        'text': 'Xin lỗi vì bất tiện này, tôi chưa hiểu yêu cầu của bạn. Bạn có thể chọn một trong các quick replies phía dưới',
                         "quick_replies":[
                             {
                                 "content_type":"text",
