@@ -16,6 +16,12 @@ let moment = require("moment");
  * @returns object{state:"asking",data:"cmd"}
  */
 let NLP_Handing = (message) => {
+    if (message == "signin") {
+        return {
+            state:"signin",
+            data:""
+        }
+    }
     if(is_login_syntax(message)){
         return {
             state:"signin",
