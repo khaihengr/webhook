@@ -12,6 +12,7 @@ const M_student = require("./models/m_student");
 const moment = require("moment");
 const _ = require("lodash");
 const quick_reply = require("./libs/quick_reply");
+const {sender_acction,callSendAPI} = require("./libs/send_api");
 require("dotenv").config();
 
 // Set default format for momentjs
@@ -40,6 +41,7 @@ app.get('/', (req, res) => {
 });
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
+    send_api.sender_acction();
     try{
         let response;
         if (received_message.quick_reply) {
@@ -222,12 +224,7 @@ function handleMessage(sender_psid, received_message) {
                 default: {
                     response = {
                         'text': 'Xin lỗi vì bất tiện này, tôi chưa hiểu yêu cầu của bạn. Bạn có thể chọn một trong các quick replies phía dưới',
-                        "quick_replies":[
-                            { "content_type": "text", "title": "Hôm nay", "payload": "Lịch học hôm nay" },
-                            { "content_type": "text", "title": "Ngày mai", "payload": "Lịch học ngày mai" },
-                            { "content_type": "text", "title": "Ngày kia", "payload": "Lịch học ngày kia" },
-                            { "content_type": "text", "title": "Help", "payload": "Help" },
-                        ]
+                        "quick_replies":quick_reply.text_reply
                     }
                 }    
             }
@@ -262,25 +259,25 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
-    let request_body = {
-        recipient: {
-            id: sender_psid,
-        },
-        message: response,
-    };
-    console.log(request_body);
-    request.post(url, {
-        json: request_body,
-    }, (err, res, body) => {
-        console.log("body:",body);
-        if (!err) {
-            console.log('message sent!');
-        } else {
-            console.log('message can\'t send ' + err);
-        }
-    });
-}
+// function callSendAPI(sender_psid, response) {
+//     let request_body = {
+//         recipient: {
+//             id: sender_psid,
+//         },
+//         message: response,
+//     };
+    
+//     request.post(url, {
+//         json: request_body,
+//     }, (err, res, body) => {
+//         console.log("body:",body);
+//         if (!err) {
+//             console.log('message sent!');
+//         } else {
+//             console.log('message can\'t send ' + err);
+//         }
+//     });
+// }
 
 app.post('/webhook', (req, res) => {
     let body = req.body;
