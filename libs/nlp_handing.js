@@ -40,7 +40,6 @@ let NLP_Handing = (message) => {
             data: ""
         }
     }
-
     if (is_greeting_syntax(message)) {
         return{
             state:"greeting",

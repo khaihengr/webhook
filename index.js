@@ -239,6 +239,21 @@ function handleMessage(sender_psid, received_message) {
                     });
                     break;
                 }    
+                case "help": {
+                    response = {
+                        'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
+                        Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
+                        `,
+                        "quick_replies":quick_reply.text_reply
+                    };
+                    break;
+                }        
+                case "greeting": {
+                    response = {
+                        'text': "Bot chào bạn ạ :3"
+                    }
+                    break;
+                }    
                 default: {
                     response = {
                         'text': 'Xin lỗi vì bất tiện này, tôi chưa hiểu yêu cầu của bạn. Bạn có thể chọn một trong các quick replies phía dưới',
