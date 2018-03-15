@@ -223,7 +223,10 @@ function handleMessage(sender_psid, received_message) {
                     response = {
                         'text': 'Xin lỗi vì bất tiện này, tôi chưa hiểu yêu cầu của bạn. Bạn có thể chọn một trong các quick replies phía dưới',
                         "quick_replies":[
-                            quick_reply.text_reply
+                            { "content_type": "text", "title": "Hôm nay", "payload": "Lịch học hôm nay" },
+                            { "content_type": "text", "title": "Ngày mai", "payload": "Lịch học ngày mai" },
+                            { "content_type": "text", "title": "Ngày kia", "payload": "Lịch học ngày kia" },
+                            { "content_type": "text", "title": "Help", "payload": "Help" },
                         ]
                     }
                 }    
