@@ -1,0 +1,6 @@
+        console.log(moment(convert_string_to_date(cmd[0]),"DD/MM/YYYY").weekday());
+
+ && moment(cmd, "DD/MM/YYYY").weekday() == s.weekday
+  &&
+                                        moment(cmd, "DD/MM/YYYY").weekday() == s.weekday
+                                        ERROR: "npm rebuild phantomjs-prebuilt"
