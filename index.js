@@ -81,7 +81,7 @@ function handleMessage(sender_psid, received_message) {
                                     && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
                                         room = subject.place.find(p => {
-                                            if (new RegExp(i, "gi").test(p.room)) {
+                                            if (new RegExp(i, "gi").test(p.id)) {
                                                 return p;
                                             }
                                         });
@@ -257,26 +257,6 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
 }
 
-// Sends response messages via the Send API
-// function callSendAPI(sender_psid, response) {
-//     let request_body = {
-//         recipient: {
-//             id: sender_psid,
-//         },
-//         message: response,
-//     };
-    
-//     request.post(url, {
-//         json: request_body,
-//     }, (err, res, body) => {
-//         console.log("body:",body);
-//         if (!err) {
-//             console.log('message sent!');
-//         } else {
-//             console.log('message can\'t send ' + err);
-//         }
-//     });
-// }
 
 app.post('/webhook', (req, res) => {
     let body = req.body;
