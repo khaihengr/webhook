@@ -178,21 +178,20 @@ function handleMessage(sender_psid, received_message) {
                                                 return p;
                                             }
                                         });
-                                        if (!room) {
-                                            room = subject.place[0].room;
-                                            notif.push({
-                                                name: subject.name,
-                                                stDate: s.stDate,
-                                                place: room
-                                            })
-                                        } else {
+                                        try {
                                             notif.push({
                                                 name: subject.name,
                                                 stDate: s.stDate,
                                                 place: room.room
                                             })
+                                        }catch(e){
+                                            room = subject.place[0];
+                                            notif.push({
+                                                name: subject.name,
+                                                stDate: s.stDate,
+                                                place: room
+                                            })
                                         }
-                                        
                                     }
                                 })
                             })
