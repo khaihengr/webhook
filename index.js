@@ -132,7 +132,7 @@ function handleMessage(sender_psid, received_message) {
                             {
                                 "content_type":"lịch học hôm nay",
                                 "title":"Hôm nay",
-                                "payload":"lịch học hôm nay"
+                                "payload":"<POSTBACK_PAYLOAD>"
                             },
                         ]
                     }
