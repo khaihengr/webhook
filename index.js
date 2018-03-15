@@ -173,9 +173,9 @@ function handleMessage(sender_psid, received_message) {
                                     moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
                                     && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
+                                        let rom_id = i + 1;
                                         room = subject.place.find(p => {
-                                            console.log(i);
-                                            if (new RegExp(i, "gi").test(p.room)) {
+                                            if (new RegExp(rom_id, "gi").test(p.room)) {
                                                 return p;
                                             }
                                         });
