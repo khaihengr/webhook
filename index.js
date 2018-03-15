@@ -75,8 +75,8 @@ function handleMessage(sender_psid, received_message) {
                                 let subject = subjects;
                                 subjects.datetime.forEach((s, i) => {
                                     if (moment(cmd, "DD/MM/YYYY").isSameOrAfter(moment(s.startDate, "DD/MM/YYYY").format("YYYY-MM-DD")) && 
-                                        moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
-                                        && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
+                                    moment(cmd, "DD/MM/YYYY").isSameOrBefore(moment(s.endDate, "DD/MM/YYYY").format("YYYY-MM-DD"))
+                                    && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
                                         room = subject.place.find(p => {
                                             if (new RegExp(i, "gi").test(p.room)) {
@@ -108,10 +108,10 @@ function handleMessage(sender_psid, received_message) {
                                         response = {
                                             'text': `học phần ${mes.name} tiết ${mes.stDate} tại ${mes.place} :)`
                                         }
-                            
+                                        
                                         callSendAPI(sender_psid, response);
                                     });
-
+                                    
                                 } else {
                                     response = {
                                         'text': `Lịch học trống :3`
@@ -127,7 +127,14 @@ function handleMessage(sender_psid, received_message) {
                 }    
                 default: {
                     response = {
-                        'text':'no match anything'
+                        'text': 'no match anything',
+                        "quick_replies":[
+                            {
+                                "content_type":"lịch học hôm nay",
+                                "title":"Hôm nay",
+                                "payload":"lịch học hôm nay"
+                            },
+                        ]
                     }
                 }    
             }
