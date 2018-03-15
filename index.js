@@ -130,9 +130,10 @@ function handleMessage(sender_psid, received_message) {
                         'text': 'no match anything',
                         "quick_replies":[
                             {
-                                "content_type":"lịch học hôm nay",
-                                "title":"Hôm nay",
-                                "payload":"<POSTBACK_PAYLOAD>"
+                                "content_type":"text",
+                                "title":"Search",
+                                "payload":"<POSTBACK_PAYLOAD>",
+                                "image_url":"http://trangbatdongsan.vn/templates/images/gg.png"
                             },
                         ]
                     }
