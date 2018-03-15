@@ -111,9 +111,7 @@ function handleMessage(sender_psid, received_message) {
                                         mes.name = mes.name.substring(0, mes.name.indexOf("-"));
                                         response = {
                                             'text': `học phần ${mes.name} tiết ${mes.stDate} tại ${mes.place}`,
-                                            "quick_replies":[
-                                                quick_reply.text_reply
-                                            ]
+                                            "quick_replies":quick_reply.text_reply
                                         }
                                         
                                         callSendAPI(sender_psid, response);
@@ -140,9 +138,7 @@ function handleMessage(sender_psid, received_message) {
                         'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
                         Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
                         `,
-                        "quick_replies":[
-                            quick_reply.text_reply
-                        ]
+                        "quick_replies":quick_reply.text_reply
                     };
                     break;
                 }        
@@ -155,9 +151,7 @@ function handleMessage(sender_psid, received_message) {
                 default: {
                     response = {
                         'text': 'Bạn có thể chọn help trong menu hoặc gõ help để được trợ giúp. Nếu bạn đã đăng nhập có thể chọn các chức năng bên dưới',
-                        "quick_replies":[
-                            quick_reply.text_reply
-                        ]
+                        "quick_replies":quick_reply.text_reply
                     }
                 }    
             }
