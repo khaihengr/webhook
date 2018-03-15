@@ -28,9 +28,28 @@ let NLP_Handing = (message) => {
             data: asking_syntax(message)
         }
     }
+    if (is_update_asking(message)) {
+        return{
+            state:"update",
+            data: ""
+        }
+    }
+    if (is_get_started(message)) {
+        return{
+            state:"started",
+            data: ""
+        }
+    }
     return message;
 };
-
+let is_update_asking = (message) => {
+    let pattern = new RegExp(/.*(update)/,"g");
+    return pattern.test(message);
+}
+let is_get_started = (message) => {
+    let pattern = new RegExp(/.*(get_started|bat dau|getstarted)/,"g");
+    return pattern.test(message);
+}
 let asking_syntax = (message) => {
     
     let pattern = new RegExp(/(ngay nay tuan sau|ngay nay thang sau|ngay nay tuan truoc|ngay nay thang truoc|hom kia|hom qua|hom nay|ngay mai|ngay kia|\d{1,2}\/\d{1,2}\/\d{4}|\d{1,2}\/\d{1,2}|\d{1,2})/, "gi");
