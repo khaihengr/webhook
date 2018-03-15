@@ -10,7 +10,6 @@ function callSendAPI(sender_psid, response) {
         },
         message: response,
     };
-    console.log(request_body);
     request.post(url, {
         json: request_body,
     }, (err, res, body) => {
@@ -29,7 +28,6 @@ function sender_acction(sender_psid) {
         },
         "sender_action":"typing_on"
     };
-    console.log(request_body);
     request.post(url, {
         json: request_body,
     }, (err, res, body) => {

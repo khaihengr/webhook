@@ -20,7 +20,6 @@ moment.defaultFormat="DD/MM/YYYY"
 
 mongoose.Promise = global.Promise;
 // let MONGO_URI = process.env.MONGO_URI;
-console.log(process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI).then(()=>{
     console.log('DB is connected ...')
 }).catch(()=>{
@@ -41,7 +40,7 @@ app.get('/', (req, res) => {
 });
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-    send_api.sender_acction();
+    sender_acction();
     try{
         let response;
         if (received_message.quick_reply) {
