@@ -39,7 +39,7 @@ let save_data = (data)=>{
             return;
         } else {
             let response = {
-                text: "Bạn đã đăng nhập rồi"
+                text: "Bạn đã đăng nhập trước đó rồi"
             }
             callSendAPI(data._id, response);
             console.log("it've already declared before");

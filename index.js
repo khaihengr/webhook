@@ -44,6 +44,7 @@ function handleMessage(sender_psid, received_message) {
     try{
         let response;
         if (received_message.quick_reply) {
+            console.log(received_message.quick_reply.payload);
             let message = unicode.unicode_convert(received_message.quick_reply.payload);
             let cmd_data = NLP.NLP_Handing(message);
             switch (cmd_data.state) {
@@ -158,9 +159,6 @@ function handleMessage(sender_psid, received_message) {
         } else {
             let message = unicode.unicode_convert(received_message.text);
             let cmd_data = NLP.NLP_Handing(message);
-            console.log('====================================');
-            console.log(cmd_data);
-            console.log('====================================');
             switch (cmd_data.state) {
                 case "signin": {
                     let account_info = cmd_data.data;
@@ -229,7 +227,7 @@ function handleMessage(sender_psid, received_message) {
                                     
                                 } else {
                                     response = {
-                                        'text': `Lịch học trống :3`
+                                        'text': `Lịch học của bạn trống :3`
                                     }
                                     callSendAPI(sender_psid, response);
                                 }
@@ -290,9 +288,7 @@ function handlePostback(sender_psid, received_postback) {
         }
         case "signin": {
             response = {
-                'text': `Bạn đã đăng nhập bằng cú pháp như sau:
-                SIGNIN[USER-PASS]
-                Với USER và PASS là thông tin đăng nhập trên website của trường của bạn
+                'text': `Bạn đã đăng nhập bằng cú pháp như sau: SIGNIN[USER-PASS] Với USER và PASS là thông tin đăng nhập trên website của trường của bạn
                 `
             };
             break;
@@ -305,8 +301,7 @@ function handlePostback(sender_psid, received_postback) {
         }  
         case "help": {
             response = {
-                'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
-                Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
+                'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học. Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
                 `
             };
             break;
