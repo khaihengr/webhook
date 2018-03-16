@@ -100,7 +100,7 @@ let convert_string_to_date=(sdate)=>{
             let match_date = moment(cur_date, "DD/MM/YYYY").subtract(7, 'days').format('DD/MM/YYYY');
             return match_date;
         }
-        case "home qua": {
+        case "hom qua": {
             let cur_date = moment().format("DD/MM/YYYY");
             let match_date = moment(cur_date, "DD/MM/YYYY").subtract(1, 'days').format('DD/MM/YYYY');
             return match_date;

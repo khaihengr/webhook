@@ -48,9 +48,9 @@ function handleMessage(sender_psid, received_message) {
             let cmd_data = NLP.NLP_Handing(message);
             switch (cmd_data.state) {
                 case "signin": {
-                    let account_info = cmd.data;
+                    let account_info = cmd_data.data;
                     response = {
-                        'text': `Bạn gửi yêu cầu đăng nhập tài khoản:
+                        'text': `Bạn gửi yêu cầu đăng nhập với tài khoản:
                         user: ${account_info.username},
                         pass: ${account_info.password}
                         `
@@ -98,7 +98,7 @@ function handleMessage(sender_psid, received_message) {
                                             notif.push({
                                                 name: subject.name,
                                                 stDate: s.stDate,
-                                                place: room
+                                                place: room.room
                                             })
                                         }
                                         
@@ -135,8 +135,7 @@ function handleMessage(sender_psid, received_message) {
                 }    
                 case "help": {
                     response = {
-                        'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
-                        Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
+                        'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học. Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
                         `,
                         "quick_replies":quick_reply.text_reply
                     };
@@ -159,13 +158,14 @@ function handleMessage(sender_psid, received_message) {
         } else {
             let message = unicode.unicode_convert(received_message.text);
             let cmd_data = NLP.NLP_Handing(message);
+            console.log('====================================');
+            console.log(cmd_data);
+            console.log('====================================');
             switch (cmd_data.state) {
                 case "signin": {
-                    let account_info = cmd.data;
+                    let account_info = cmd_data.data;
                     response = {
-                        'text': `Bạn đã đăng nhập với tài khoản:
-                        user: ${account_info.username},
-                        pass: ${account_info.password}
+                        'text': `Bạn đã gửi yêu cầu đăng nhập, hãy đợi kết quả trong giây lát
                         `
                     };
                     getClendar.get_calendar(account_info.username,account_info.password,(data)=>{
@@ -181,7 +181,6 @@ function handleMessage(sender_psid, received_message) {
                 }
                 case "asking": {
                     let cmd = cmd_data.data;
-                    console.log(cmd);
                     M_student.get_data(sender_psid, (err, res) => {
                         if (res) {
                             let data = res.calendar;
@@ -194,11 +193,13 @@ function handleMessage(sender_psid, received_message) {
                                     && (moment(cmd, "DD/MM/YYYY").weekday() + 1) == s.weekday) {
                                         let room = {}
                                         let rom_id = i + 1;
+                                        console.log("i="+rom_id)
                                         room = subject.place.find(p => {
-                                            if (new RegExp(rom_id, "gi").test(p.room)) {
+                                            if (new RegExp(rom_id, "gi").test(p.id)) {
                                                 return p;
                                             }
                                         });
+                                        console.log(room);
                                         try {
                                             notif.push({
                                                 name: subject.name,
@@ -210,7 +211,7 @@ function handleMessage(sender_psid, received_message) {
                                             notif.push({
                                                 name: subject.name,
                                                 stDate: s.stDate,
-                                                place: room
+                                                place: room.room
                                             })
                                         }
                                     }
@@ -241,8 +242,7 @@ function handleMessage(sender_psid, received_message) {
                 }    
                 case "help": {
                     response = {
-                        'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học
-                        Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
+                        'text': `Bạn cần đăng nhập để xem được lịch học, sau khi đăng nhập thành công bạn có thể yêu cầu Bot cho bạn xem lịch học. Nếu bạn đã đăng nhập bạn có thể hỏi bot về  lịch học của mình ví dụ: lịch học hôm nay, lịch học hôm qua, lịch học ngày này tuần sau ...
                         `,
                         "quick_replies":quick_reply.text_reply
                     };
