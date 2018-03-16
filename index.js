@@ -44,6 +44,7 @@ function handleMessage(sender_psid, received_message) {
     try{
         let response;
         if (received_message.quick_reply) {
+            console.log(received_message.quick_reply.payload);
             let message = unicode.unicode_convert(received_message.quick_reply.payload);
             let cmd_data = NLP.NLP_Handing(message);
             switch (cmd_data.state) {
@@ -195,7 +196,9 @@ function handleMessage(sender_psid, received_message) {
                                         let room = {}
                                         let rom_id = i + 1;
                                         room = subject.place.find(p => {
-                                            if (new RegExp(rom_id, "gi").test(p.room)) {
+                                            console.log(i);
+                                            
+                                            if (new RegExp(rom_id, "gi").test(p.id)) {
                                                 return p;
                                             }
                                         });
